@@ -4,6 +4,7 @@ interface ButtonProps {
     variant: 'primary' | 'secondary';
     text: string;
     startIcon: ReactElement;
+    onClick?: () => void;
 }
 
 const variantClasses = {
@@ -14,9 +15,12 @@ const variantClasses = {
 const defaultStyles =
     'px-4 py-2 rounded-md font-normal flex justify-center items-center gap-1.5';
 
-export function Button({ variant, text, startIcon }: ButtonProps) {
+export function Button({ variant, text, startIcon, onClick }: ButtonProps) {
     return (
-        <button className={variantClasses[variant] + ' ' + defaultStyles}>
+        <button
+            onClick={onClick}
+            className={variantClasses[variant] + ' ' + defaultStyles}
+        >
             {startIcon}
             {text}
         </button>
