@@ -3,8 +3,10 @@ import { ReactElement } from 'react';
 interface ButtonProps {
     variant: 'primary' | 'secondary';
     text: string;
-    startIcon: ReactElement;
+    startIcon?: ReactElement;
     onClick?: () => void;
+    fullWidth?: boolean;
+    loading?: boolean;
 }
 
 const variantClasses = {
@@ -15,14 +17,33 @@ const variantClasses = {
 const defaultStyles =
     'px-4 py-2 rounded-md font-normal flex justify-center items-center gap-1.5';
 
-export function Button({ variant, text, startIcon, onClick }: ButtonProps) {
+export function Button({
+    variant,
+    text,
+    startIcon,
+    onClick,
+    fullWidth,
+    loading,
+}: ButtonProps) {
     return (
         <button
-            onClick={onClick}
-            className={variantClasses[variant] + ' ' + defaultStyles}
+            onClick={!loading ? onClick : undefined} // Prevent clicks when loading
+            disabled={loading}
+            className={`${variantClasses[variant]} ${defaultStyles} ${
+                fullWidth ? 'w-full' : ''
+            } ${loading ? 'opacity-50 pointer-events-none' : ''}`}
         >
-            {startIcon}
-            {text}
+            {loading ? (
+                <span className="flex items-center gap-2">
+                    <span className="loader animate-spin border-2 border-t-2 border-white rounded-full h-4 w-4"></span>
+                    Loading...
+                </span>
+            ) : (
+                <>
+                    {startIcon}
+                    {text}
+                </>
+            )}
         </button>
     );
 }
